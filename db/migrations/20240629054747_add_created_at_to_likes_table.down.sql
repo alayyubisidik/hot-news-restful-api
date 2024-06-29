@@ -1,0 +1,2 @@
+ALTER TABLE Likes
+DROP COLUMN created_at;

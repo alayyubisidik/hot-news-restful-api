@@ -48,22 +48,43 @@ func ToArticleResponse(article domain.Article) web.ArticleResponse {
 
 func ToCommentResponse(comment domain.Comment) web.CommentResponse {
 	return web.CommentResponse{
-		Id: comment.ID,
-		Content: comment.Content,
+		Id:        comment.ID,
+		Content:   comment.Content,
 		CreatedAt: comment.CreatedAt,
 		User: web.UserResponse{
-			Id: comment.User.ID,
-			Username: comment.User.Username,
-			FullName: comment.User.FullName,
-			Email: comment.User.Email,
+			Id:        comment.User.ID,
+			Username:  comment.User.Username,
+			FullName:  comment.User.FullName,
+			Email:     comment.User.Email,
 			CreatedAt: comment.User.CreatedAt,
 		},
 		Article: web.ArticleSimpleResponse{
-			Id: comment.Article.ID,
-			Title: comment.Article.Title,
-			Slug: comment.Article.Slug,
-			Content: comment.Article.Content,
+			Id:        comment.Article.ID,
+			Title:     comment.Article.Title,
+			Slug:      comment.Article.Slug,
+			Content:   comment.Article.Content,
 			CreatedAt: comment.Article.CreatedAt,
+		},
+	}
+}
+
+func ToLikeResponse(like domain.Like) web.LikeResponse {
+	return web.LikeResponse{
+		Id:        like.ID,
+		CreatedAt: like.CreatedAt,
+		User: web.UserResponse{
+			Id:        like.User.ID,
+			Username:  like.User.Username,
+			FullName:  like.User.FullName,
+			Email:     like.User.Email,
+			CreatedAt: like.User.CreatedAt,
+		},
+		Article: web.ArticleSimpleResponse{
+			Id:        like.Article.ID,
+			Title:     like.Article.Title,
+			Slug:      like.Article.Slug,
+			Content:   like.Article.Content,
+			CreatedAt: like.Article.CreatedAt,
 		},
 	}
 }
