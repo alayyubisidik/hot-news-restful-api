@@ -40,6 +40,12 @@ var commentSet = wire.NewSet(
 	controller.NewCommentController,
 )
 
+var likeSet = wire.NewSet(
+	repository.NewLikeRepository,
+	service.NewLikeService,
+	controller.NewLikeController,
+)
+
 func InitializedServer() *http.Server {
 	wire.Build(
 		app.NewDB,
@@ -48,6 +54,7 @@ func InitializedServer() *http.Server {
 		categorySet,
 		articleSet,
 		commentSet,
+		likeSet,
 		app.NewRouter,
 		wire.Bind(new(http.Handler), new(*httprouter.Router)),
 		middleware.NewAuthMiddleware,

@@ -27,12 +27,14 @@ func (middleware *AuthMiddleware) ServeHTTP(writer http.ResponseWriter, request 
 			"/api/v1/categories",
 			"/api/v1/articles",
 			"/api/v1/comments",
+			"/api/v1/likes",
 		},
 		"DELETE": {
 			"/api/v1/users/signout",
 			"/api/v1/categories",
 			"/api/v1/articles",
 			"/api/v1/comments",
+			"/api/v1/likes",
 		},
 		"PUT": {
 			"/api/v1/users",
