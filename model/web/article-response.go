@@ -13,3 +13,11 @@ type ArticleResponse struct {
 	User      UserResponse     `json:"user"`
 	Category  CategoryResponse `json:"category"`
 }
+
+type ArticleSimpleResponse struct {
+	Id        int              `json:"id"`
+	Title     string           `json:"title"`
+	Slug      string           `json:"slug"`
+	Content   string           `json:"content"`
+	CreatedAt time.Time        `json:"created_at"`
+}

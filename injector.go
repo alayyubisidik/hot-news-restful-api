@@ -34,6 +34,12 @@ var articleSet = wire.NewSet(
 	controller.NewArticleController,
 )
 
+var commentSet = wire.NewSet(
+	repository.NewCommentRepository,
+	service.NewCommentService,
+	controller.NewCommentController,
+)
+
 func InitializedServer() *http.Server {
 	wire.Build(
 		app.NewDB,
@@ -41,6 +47,7 @@ func InitializedServer() *http.Server {
 		userSet,
 		categorySet,
 		articleSet,
+		commentSet,
 		app.NewRouter,
 		wire.Bind(new(http.Handler), new(*httprouter.Router)),
 		middleware.NewAuthMiddleware,

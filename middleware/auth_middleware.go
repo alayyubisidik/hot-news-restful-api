@@ -26,16 +26,19 @@ func (middleware *AuthMiddleware) ServeHTTP(writer http.ResponseWriter, request 
 		"POST": {
 			"/api/v1/categories",
 			"/api/v1/articles",
+			"/api/v1/comments",
 		},
 		"DELETE": {
 			"/api/v1/users/signout",
 			"/api/v1/categories",
 			"/api/v1/articles",
+			"/api/v1/comments",
 		},
 		"PUT": {
 			"/api/v1/users",
 			"/api/v1/categories",
 			"/api/v1/articles",
+			"/api/v1/comments",
 		},
 		// Tambahkan metode dan rute lainnya sesuai kebutuhan
 	}

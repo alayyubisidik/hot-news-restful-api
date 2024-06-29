@@ -183,7 +183,7 @@ func (service *ArticleServiceImpl) Update(ctx context.Context, request web.Artic
 
 		return nil
 	})
-
+ 
 	helper.PanicIfError(err)
 
 	return helper.ToArticleResponse(article)

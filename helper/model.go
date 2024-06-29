@@ -46,6 +46,28 @@ func ToArticleResponse(article domain.Article) web.ArticleResponse {
 	}
 }
 
+func ToCommentResponse(comment domain.Comment) web.CommentResponse {
+	return web.CommentResponse{
+		Id: comment.ID,
+		Content: comment.Content,
+		CreatedAt: comment.CreatedAt,
+		User: web.UserResponse{
+			Id: comment.User.ID,
+			Username: comment.User.Username,
+			FullName: comment.User.FullName,
+			Email: comment.User.Email,
+			CreatedAt: comment.User.CreatedAt,
+		},
+		Article: web.ArticleSimpleResponse{
+			Id: comment.Article.ID,
+			Title: comment.Article.Title,
+			Slug: comment.Article.Slug,
+			Content: comment.Article.Content,
+			CreatedAt: comment.Article.CreatedAt,
+		},
+	}
+}
+
 func ToCategoryResponses(categories []domain.Category) []web.CategoryResponse {
 	var categoryResponses []web.CategoryResponse
 	for _, category := range categories {
@@ -60,4 +82,12 @@ func ToArticleResponses(articles []domain.Article) []web.ArticleResponse {
 		articleResponses = append(articleResponses, ToArticleResponse(article))
 	}
 	return articleResponses
+}
+
+func ToCommentResponses(comments []domain.Comment) []web.CommentResponse {
+	var commentResponses []web.CommentResponse
+	for _, comment := range comments {
+		commentResponses = append(commentResponses, ToCommentResponse(comment))
+	}
+	return commentResponses
 }
