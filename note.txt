@@ -26,7 +26,7 @@ created_at (tanggal dibuat)
 updated_at (tanggal diperbarui)
 Tabel Komentar (Comments)
 
-comment_id (Primary Key)
+id (Primary Key)
 article_id (Foreign Key ke article_id di tabel Berita)
 user_id (Foreign Key ke user_id di tabel Pengguna)
 content (konten komentar)

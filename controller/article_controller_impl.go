@@ -9,7 +9,7 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 )
-
+ 
 type ArticleControllerImpl struct {
 	ArticleService service.ArticleService
 }
@@ -98,7 +98,7 @@ func (controller *ArticleControllerImpl) Update(writer http.ResponseWriter, requ
 
 	articleResponse := controller.ArticleService.Update(request.Context(), articleUpdateRequest, articleSlug)
 	webResponse := web.WebResponse{
-		Code: 201,
+		Code: 200,
 		Status: "OK",
 		Data: articleResponse,
 	}

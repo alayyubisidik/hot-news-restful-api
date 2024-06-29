@@ -31,7 +31,10 @@ func InitializedServer() *http.Server {
 	articleRepository := repository.NewArticleRepository()
 	articleService := service.NewArticleService(articleRepository, db, validate)
 	articleController := controller.NewArticleController(articleService)
-	router := app.NewRouter(userController, categoryController, articleController)
+	commentRepository := repository.NewCommentRepository()
+	commentService := service.NewCommentService(commentRepository, db, validate)
+	commentController := controller.NewCommentController(commentService)
+	router := app.NewRouter(userController, categoryController, articleController, commentController)
 	authMiddleware := middleware.NewAuthMiddleware(router)
 	server := NewServer(authMiddleware)
 	return server
@@ -44,3 +47,5 @@ var userSet = wire.NewSet(repository.NewUserRepository, service.NewUserService, 
 var categorySet = wire.NewSet(repository.NewCategoryRepository, service.NewCategoryService, controller.NewCategoryController)
 
 var articleSet = wire.NewSet(repository.NewArticleRepository, service.NewArticleService, controller.NewArticleController)
+
+var commentSet = wire.NewSet(repository.NewCommentRepository, service.NewCommentService, controller.NewCommentController)

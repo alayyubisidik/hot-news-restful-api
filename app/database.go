@@ -30,3 +30,5 @@ func NewDB() *gorm.DB {
 
 // migrate -database "mysql://root:@tcp(127.0.0.1:3306)/hot_news_2?charset=utf8mb4&parseTime=True&loc=Local" -path db/migrations up
 // migrate -database "mysql://root:@tcp(127.0.0.1:3306)/hot_news_2?charset=utf8mb4&parseTime=True&loc=Local" -path db/migrations down
+// migrate -database "mysql://root:@tcp(127.0.0.1:3306)/hot_news_2?charset=utf8mb4&parseTime=True&loc=Local" -path db/migrations force 9863498326134
+// migrate -database "mysql://root:@tcp(127.0.0.1:3306)/hot_news_2?charset=utf8mb4&parseTime=True&loc=Local" -path db/migrations version
