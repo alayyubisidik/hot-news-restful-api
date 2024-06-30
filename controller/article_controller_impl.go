@@ -9,7 +9,7 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 )
- 
+
 type ArticleControllerImpl struct {
 	ArticleService service.ArticleService
 }
@@ -22,13 +22,12 @@ func NewArticleController(articleService service.ArticleService) ArticleControll
 
 func (controller *ArticleControllerImpl) FindAll(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 	articlesResponse := controller.ArticleService.FindAll(request.Context())
+
 	webResponse := web.WebResponse{
-		Code: 200,
-		Status: "OK",
 		Data: articlesResponse,
 	}
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 200)
 }
 
 func (controller *ArticleControllerImpl) FindByCategory(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
@@ -36,12 +35,10 @@ func (controller *ArticleControllerImpl) FindByCategory(writer http.ResponseWrit
 
 	articleResponses := controller.ArticleService.FindByCategory(request.Context(), categorySlug)
 	webResponse := web.WebResponse{
-		Code: 200,
-		Status: "OK",
 		Data: articleResponses,
 	}
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 200)
 }
 
 func (controller *ArticleControllerImpl) FindByUser(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
@@ -49,12 +46,10 @@ func (controller *ArticleControllerImpl) FindByUser(writer http.ResponseWriter, 
 
 	articleResponses := controller.ArticleService.FindByUser(request.Context(), username)
 	webResponse := web.WebResponse{
-		Code: 200,
-		Status: "OK",
 		Data: articleResponses,
 	}
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 200)
 }
 
 func (controller *ArticleControllerImpl) FindBySlug(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
@@ -62,12 +57,10 @@ func (controller *ArticleControllerImpl) FindBySlug(writer http.ResponseWriter, 
 
 	articleResponse := controller.ArticleService.FindBySlug(request.Context(), articleSlug)
 	webResponse := web.WebResponse{
-		Code: 200,
-		Status: "OK",
 		Data: articleResponse,
 	}
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 200)
 }
 
 func (controller *ArticleControllerImpl) Create(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
@@ -79,12 +72,10 @@ func (controller *ArticleControllerImpl) Create(writer http.ResponseWriter, requ
 
 	articleResponse := controller.ArticleService.Create(request.Context(), articleCreateRequest)
 	webResponse := web.WebResponse{
-		Code: 201,
-		Status: "OK",
 		Data: articleResponse,
 	}
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 201)
 }
 
 func (controller *ArticleControllerImpl) Update(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
@@ -98,12 +89,10 @@ func (controller *ArticleControllerImpl) Update(writer http.ResponseWriter, requ
 
 	articleResponse := controller.ArticleService.Update(request.Context(), articleUpdateRequest, articleSlug)
 	webResponse := web.WebResponse{
-		Code: 200,
-		Status: "OK",
 		Data: articleResponse,
 	}
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 200)
 }
 
 func (controller *ArticleControllerImpl) Delete(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
@@ -111,9 +100,8 @@ func (controller *ArticleControllerImpl) Delete(writer http.ResponseWriter, requ
 
 	controller.ArticleService.Delete(request.Context(), articleSlug)
 	webResponse := web.WebResponse{
-		Code: 200,
-		Status: "OK",
+		Data: "Article successfully deleted",
 	}
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 200)
 }

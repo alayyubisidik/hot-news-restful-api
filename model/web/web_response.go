@@ -1,7 +1,15 @@
 package web
 
 type WebResponse struct {
-	Code   int    `json:"code"`
-	Status string `json:"status"`
-	Data   any    `json:"data"`
+	Data any `json:"data"`
 }
+
+type ErrorResponse struct {
+	Errors []DetailError `json:"errors"`
+}
+
+type DetailError struct {
+	Field   string `json:"field"`
+	Message string    `json:"message"`
+}
+ 

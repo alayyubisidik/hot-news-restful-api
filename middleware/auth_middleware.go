@@ -60,13 +60,16 @@ func (middleware *AuthMiddleware) ServeHTTP(writer http.ResponseWriter, request 
 		if err != nil {
 			writer.Header().Set("Content-Type", "application/json")
 			writer.WriteHeader(http.StatusUnauthorized)
-
-			webResponse := web.WebResponse{
-				Code:   http.StatusUnauthorized,
-				Status: "UNAUTHORIZED",
+			
+			webResponse := web.ErrorResponse{
+				Errors: []web.DetailError{
+					{
+						Message: "Unauthorized",
+					},
+				},
 			}
 
-			helper.WriteToResponseBody(writer, webResponse)
+			helper.WriteToResponseBody(writer, webResponse, 201)
 			return
 		}
 
@@ -75,13 +78,16 @@ func (middleware *AuthMiddleware) ServeHTTP(writer http.ResponseWriter, request 
 		if err != nil {
 			writer.Header().Set("Content-Type", "application/json")
 			writer.WriteHeader(http.StatusUnauthorized)
-
-			webResponse := web.WebResponse{
-				Code:   http.StatusUnauthorized,
-				Status: "UNAUTHORIZED",
+			
+			webResponse := web.ErrorResponse{
+				Errors: []web.DetailError{
+					{
+						Message: "Unauthorized",
+					},
+				},
 			}
 
-			helper.WriteToResponseBody(writer, webResponse)
+			helper.WriteToResponseBody(writer, webResponse, 201)
 			return
 		}
 	}
