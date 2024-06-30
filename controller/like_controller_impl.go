@@ -28,12 +28,10 @@ func (controller *LikeControllerImpl) FindById(writer http.ResponseWriter, reque
 
 	likeResponse := controller.LikeService.FindById(request.Context(), id)
 	webResponse := web.WebResponse{
-		Code: 200,
-		Status: "OK",
 		Data: likeResponse,
 	}
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 200)
 }
 
 func (controller *LikeControllerImpl) Create(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
@@ -45,12 +43,10 @@ func (controller *LikeControllerImpl) Create(writer http.ResponseWriter, request
 
 	likeResponse := controller.LikeService.Create(request.Context(), likeCreateRequest)
 	webResponse := web.WebResponse{
-		Code: 201,
-		Status: "OK",
 		Data: likeResponse,
 	}
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 201)
 }
 
 func (controller *LikeControllerImpl) Delete(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
@@ -61,9 +57,8 @@ func (controller *LikeControllerImpl) Delete(writer http.ResponseWriter, request
 
 	controller.LikeService.Delete(request.Context(), id)
 	webResponse := web.WebResponse{
-		Code: 200,
-		Status: "OK",
+		Data: "Like successfully deleted",
 	}
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 200)
 }

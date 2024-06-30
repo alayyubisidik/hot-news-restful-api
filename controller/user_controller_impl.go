@@ -36,8 +36,6 @@ func (controller *UserControllerImpl) SignUp(writer http.ResponseWriter, request
     })
 
     webResponse := web.WebResponse{
-        Code:   201,
-        Status: "OK",
 		Data: struct {
 			Id        int       `json:"id"`
 			Username  string    `json:"username"`
@@ -53,7 +51,7 @@ func (controller *UserControllerImpl) SignUp(writer http.ResponseWriter, request
 		},
     }
 
-    helper.WriteToResponseBody(writer, webResponse)
+    helper.WriteToResponseBody(writer, webResponse, 201)
 }
 
 func (controller *UserControllerImpl) SignIn(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
@@ -71,8 +69,6 @@ func (controller *UserControllerImpl) SignIn(writer http.ResponseWriter, request
     })
 
     webResponse := web.WebResponse{
-        Code:   201,
-        Status: "OK",
 		Data: struct {
 			Id        int       `json:"id"`
 			Username  string    `json:"username"`
@@ -88,7 +84,7 @@ func (controller *UserControllerImpl) SignIn(writer http.ResponseWriter, request
 		},
     }
 
-    helper.WriteToResponseBody(writer, webResponse)
+    helper.WriteToResponseBody(writer, webResponse, 200)
 }
 
 func (controller *UserControllerImpl) SignOut(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
@@ -101,23 +97,25 @@ func (controller *UserControllerImpl) SignOut(writer http.ResponseWriter, reques
 	})
 
 	webResponse := web.WebResponse{
-		Code:   200,
-		Status: "OK",
+		Data: "Signout successfully",
 	}
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 200)
 }
 
 func (controller *UserControllerImpl) CurrentUser(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
     tokenCookie, err := request.Cookie("jwt")
     if err != nil {
         writer.Header().Set("Content-Type", "application/json")
-        webResponse := web.WebResponse{
-            Code:   200,
-            Status: "UNAUTHENTICATED",
-			Data: nil,
+		writer.WriteHeader(http.StatusUnauthorized)
+        webResponse := web.ErrorResponse{
+			Errors: []web.DetailError{
+				{
+					Message: "Unauthorized",
+				},
+			},
         }
-        helper.WriteToResponseBody(writer, webResponse)
+        helper.WriteToResponseBody(writer, webResponse, 200)
         return
     }
 
@@ -126,12 +124,15 @@ func (controller *UserControllerImpl) CurrentUser(writer http.ResponseWriter, re
     claims, err := helper.VerifyToken(tokenString)
     if err != nil {
         writer.Header().Set("Content-Type", "application/json")
-        writer.WriteHeader(http.StatusUnauthorized)
-        webResponse := web.WebResponse{
-            Code:   http.StatusUnauthorized,
-            Status: "UNAUTHORIZED",
+		writer.WriteHeader(http.StatusUnauthorized)
+        webResponse := web.ErrorResponse{
+			Errors: []web.DetailError{
+				{
+					Message: "Unauthorized",
+				},
+			},
         }
-        helper.WriteToResponseBody(writer, webResponse)
+        helper.WriteToResponseBody(writer, webResponse, 200)
         return
     }
 
@@ -143,12 +144,10 @@ func (controller *UserControllerImpl) CurrentUser(writer http.ResponseWriter, re
     }
 
     webResponse := web.WebResponse{
-        Code:   200,
-        Status: "OK",
         Data:   userResponse,
     }
 
-    helper.WriteToResponseBody(writer, webResponse)
+    helper.WriteToResponseBody(writer, webResponse, 200)
 }
 
 
@@ -163,11 +162,9 @@ func (controller *UserControllerImpl) Update(writer http.ResponseWriter, request
 	userUpdateRequest.Id = id
 
 	userResponse := controller.UserService.Update(request.Context(), userUpdateRequest)
-	webResponse := web.WebResponse{
-		Code: 200,
-		Status: "OK",
-		Data: userResponse,
-	}
+    webResponse := web.WebResponse{
+        Data:   userResponse,
+    }
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 200)
 }

@@ -22,12 +22,10 @@ func NewCategoryController(categoryService service.CategoryService) CategoryCont
 func (controller *CategoryControllerImpl) FindAll(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 	categoriesResponse := controller.CategoryService.FindAll(request.Context())
 	webResponse := web.WebResponse{
-		Code: 200,
-		Status: "OK",
 		Data: categoriesResponse,
 	}
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 200)
 }
 
 func (controller *CategoryControllerImpl) FindBySlug(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
@@ -35,12 +33,10 @@ func (controller *CategoryControllerImpl) FindBySlug(writer http.ResponseWriter,
 
 	categoryResponse := controller.CategoryService.FindBySlug(request.Context(), categorySlug)
 	webResponse := web.WebResponse{
-		Code: 200,
-		Status: "OK",
 		Data: categoryResponse,
 	}
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 200)
 }
 
 func (controller *CategoryControllerImpl) Create(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
@@ -49,12 +45,10 @@ func (controller *CategoryControllerImpl) Create(writer http.ResponseWriter, req
 
 	categoryResponse := controller.CategoryService.Create(request.Context(), categoryCreateRequest)
 	webResponse := web.WebResponse{
-		Code: 201,
-		Status: "OK",
 		Data: categoryResponse,
 	}
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 201)
 }
 
 func (controller *CategoryControllerImpl) Update(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
@@ -65,12 +59,10 @@ func (controller *CategoryControllerImpl) Update(writer http.ResponseWriter, req
 
 	categoryResponse := controller.CategoryService.Update(request.Context(), categoryUpdateRequest, categorySlug)
 	webResponse := web.WebResponse{
-		Code: 200,
-		Status: "OK",
 		Data: categoryResponse,
 	}
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 200)
 }
 
 func (controller *CategoryControllerImpl) Delete(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
@@ -78,9 +70,8 @@ func (controller *CategoryControllerImpl) Delete(writer http.ResponseWriter, req
 
 	controller.CategoryService.Delete(request.Context(), categorySlug)
 	webResponse := web.WebResponse{
-		Code: 200,
-		Status: "OK",
+		Data: "Category successfully deleted",
 	}
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 200)
 }

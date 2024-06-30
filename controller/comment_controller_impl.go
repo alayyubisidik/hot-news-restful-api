@@ -26,12 +26,10 @@ func (controller *CommentControllerImpl) FindByUser(writer http.ResponseWriter, 
 
 	commentResponses := controller.CommentService.FindByUser(request.Context(), username)
 	webResponse := web.WebResponse{
-		Code: 200,
-		Status: "OK",
 		Data: commentResponses,
 	}
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 200)
 } 
 
 func (controller *CommentControllerImpl) FindById(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
@@ -41,12 +39,10 @@ func (controller *CommentControllerImpl) FindById(writer http.ResponseWriter, re
 
 	commentResponse := controller.CommentService.FindById(request.Context(), id)
 	webResponse := web.WebResponse{
-		Code: 200,
-		Status: "OK",
 		Data: commentResponse,
 	}
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 200)
 } 
 
 func (controller *CommentControllerImpl) Create(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
@@ -58,12 +54,10 @@ func (controller *CommentControllerImpl) Create(writer http.ResponseWriter, requ
 
 	commentResponse := controller.CommentService.Create(request.Context(), commentCreateRequest)
 	webResponse := web.WebResponse{
-		Code: 201,
-		Status: "OK",
 		Data: commentResponse,
 	}
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 201)
 } 
 
 func (controller *CommentControllerImpl) Update(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
@@ -81,12 +75,10 @@ func (controller *CommentControllerImpl) Update(writer http.ResponseWriter, requ
 
 	commentResponse := controller.CommentService.Update(request.Context(), commentUpdateRequest)
 	webResponse := web.WebResponse{
-		Code: 200,
-		Status: "OK",
 		Data: commentResponse,
 	}
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 200)
 } 
 
 func (controller *CommentControllerImpl) Delete(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
@@ -97,9 +89,8 @@ func (controller *CommentControllerImpl) Delete(writer http.ResponseWriter, requ
 
 	controller.CommentService.Delete(request.Context(), id)
 	webResponse := web.WebResponse{
-		Code: 200,
-		Status: "OK",
+		Data: "Comment successfully deleted",
 	}
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 200)
 } 

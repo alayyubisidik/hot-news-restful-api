@@ -30,13 +30,15 @@ func notFoundError(writer http.ResponseWriter, request *http.Request, err any) b
 		writer.Header().Set("Content-Type", "application/json")
 		writer.WriteHeader(http.StatusNotFound)
 
-		webResponse := web.WebResponse{
-			Code: http.StatusNotFound,
-			Status: "NOT FOUND",
-			Data: exception.Error,
+		webResponse := web.ErrorResponse{
+			Errors: []web.DetailError{
+				{
+					Message: exception.Error,
+				},
+			},
 		}
 
-		helper.WriteToResponseBody(writer, webResponse)
+		helper.WriteToResponseBody(writer, webResponse, 404)
 
 		return true
 	} else {
@@ -45,38 +47,49 @@ func notFoundError(writer http.ResponseWriter, request *http.Request, err any) b
 }
 
 func validationError(writer http.ResponseWriter, request *http.Request, err any) bool {
-	exception, ok := err.(validator.ValidationErrors)
-	if ok {
-		writer.Header().Set("Content-Type", "application/json")
-		writer.WriteHeader(http.StatusBadRequest)
-
-		webResponse := web.WebResponse{
-			Code: http.StatusBadRequest,
-			Status: "BAD REQUEST",
-			Data: exception.Error(),
-		}
-
-		helper.WriteToResponseBody(writer, webResponse)
-
-		return true
-	} else {
+	validationErr, ok := err.(validator.ValidationErrors)
+	if !ok {
 		return false
 	}
+
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(http.StatusBadRequest)
+
+	var errors []web.DetailError
+
+	for _, fieldError := range validationErr {
+		errorDetail := web.DetailError{
+			Field:   fieldError.Field(),
+			Message: fieldError.Tag(),
+		}
+		errors = append(errors, errorDetail)
+	}
+ 
+	webResponse := web.ErrorResponse{
+		Errors: errors,
+	}
+
+	helper.WriteToResponseBody(writer, webResponse, http.StatusBadRequest)
+
+	return true
 }
+
 
 func badRequestError(writer http.ResponseWriter, request *http.Request, err any) bool {
 	exception, ok := err.(BadRequestError)
 	if ok {
 		writer.Header().Set("Content-Type", "application/json")
 		writer.WriteHeader(http.StatusBadRequest)
-
-		webResponse := web.WebResponse{
-			Code: http.StatusBadRequest,
-			Status: "BAD REQUEST",
-			Data: exception.Error,
+		
+		webResponse := web.ErrorResponse{
+			Errors: []web.DetailError{
+				{
+					Message: exception.Error,
+				},
+			},
 		}
 
-		helper.WriteToResponseBody(writer, webResponse)
+		helper.WriteToResponseBody(writer, webResponse, 400)
 
 		return true
 	} else {
@@ -95,11 +108,13 @@ func internalServerError(writer http.ResponseWriter, request *http.Request, err 
         errorMessage = "Unknown error"
     }
 
-    webResponse := web.WebResponse{
-        Code:   http.StatusInternalServerError,
-        Status: "INTERNAL SERVER ERROR",
-        Data:   errorMessage,
-    }
+	webResponse := web.ErrorResponse{
+		Errors: []web.DetailError{
+			{
+				Message: errorMessage,
+			},
+		},
+	}
 
-	helper.WriteToResponseBody(writer, webResponse)
+	helper.WriteToResponseBody(writer, webResponse, 500)
 }
