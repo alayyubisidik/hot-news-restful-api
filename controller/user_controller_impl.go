@@ -67,7 +67,7 @@ func (controller *UserControllerImpl) SignIn(writer http.ResponseWriter, request
         HttpOnly: true,   
         SameSite: http.SameSiteStrictMode, 
     })
-
+ 
     webResponse := web.WebResponse{
 		Data: struct {
 			Id        int       `json:"id"`
@@ -107,7 +107,6 @@ func (controller *UserControllerImpl) CurrentUser(writer http.ResponseWriter, re
     tokenCookie, err := request.Cookie("jwt")
     if err != nil {
         writer.Header().Set("Content-Type", "application/json")
-		writer.WriteHeader(http.StatusUnauthorized)
         webResponse := web.ErrorResponse{
 			Errors: []web.DetailError{
 				{
@@ -115,7 +114,7 @@ func (controller *UserControllerImpl) CurrentUser(writer http.ResponseWriter, re
 				},
 			},
         }
-        helper.WriteToResponseBody(writer, webResponse, 200)
+        helper.WriteToResponseBody(writer, webResponse, 401)
         return
     }
 
@@ -124,7 +123,6 @@ func (controller *UserControllerImpl) CurrentUser(writer http.ResponseWriter, re
     claims, err := helper.VerifyToken(tokenString)
     if err != nil {
         writer.Header().Set("Content-Type", "application/json")
-		writer.WriteHeader(http.StatusUnauthorized)
         webResponse := web.ErrorResponse{
 			Errors: []web.DetailError{
 				{
@@ -132,7 +130,7 @@ func (controller *UserControllerImpl) CurrentUser(writer http.ResponseWriter, re
 				},
 			},
         }
-        helper.WriteToResponseBody(writer, webResponse, 200)
+        helper.WriteToResponseBody(writer, webResponse, 401)
         return
     }
 

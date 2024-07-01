@@ -43,12 +43,12 @@ func (service *UserServiceImpl) SignUp(ctx context.Context, request web.UserSign
 	err = service.DB.Transaction(func(tx *gorm.DB) error {
 		result, err := service.UserRepository.FindByUsername(ctx, tx, user.Username)
 		if err == nil && result.ID != 0 {
-			panic(exception.NewBadRequestError("Username is already exists"))
+			panic(exception.NewUnauthorizedError("Username is already exists"))
 		}
 
 		result, err = service.UserRepository.FindByEmail(ctx, tx, user.Email)
 		if err == nil && result.ID != 0 {
-			panic(exception.NewBadRequestError("Email is already exists"))
+			panic(exception.NewUnauthorizedError("Email is already exists"))
 		}
 
 		user, err = service.UserRepository.Create(ctx, tx, user)
@@ -77,12 +77,12 @@ func (service *UserServiceImpl) SignIn(ctx context.Context, request web.UserSign
 
 	user, err := service.UserRepository.FindByUsername(ctx, service.DB, request.Username)
 	if err != nil {
-		panic(exception.NewBadRequestError("Invalid credentials"))
+		panic(exception.NewUnauthorizedError("Invalid credentials"))
 	}
 	
 	err = helper.ComparePassword(user.Password, request.Password)
 	if err != nil {
-		panic(exception.NewBadRequestError("Invalid credentials"))
+		panic(exception.NewUnauthorizedError("Invalid credentials"))
 	}
 	
 	jwtToken, err := helper.CreateToken(user)

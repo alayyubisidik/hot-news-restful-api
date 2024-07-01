@@ -42,8 +42,9 @@ func NewRouter(userController controller.UserController, categoryController cont
 
     router.PanicHandler = exception.ErrorHandler
 
-    return router
+    return router 
 }
 
 
 
+ 
