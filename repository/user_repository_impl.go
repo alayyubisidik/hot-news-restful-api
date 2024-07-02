@@ -55,4 +55,4 @@ func (repository *UserRepositoryImpl) Update(ctx context.Context, tx *gorm.DB, u
 	}
 
 	return user, nil
-}
+} 
