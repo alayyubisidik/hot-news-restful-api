@@ -1,0 +1,3131 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "Hot News RESTful API",
+        "description": "The News API is a RESTful service that allows users to access, manage, and publish news articles. This API is designed to provide easy and structured access to news data, categories, users, comments, tags, and like interactions.\n\n## Key Features\n- **Users**: Manage user accounts, including registration, authentication, and user profiles.\n- **Categories**: Manage news categories for article grouping.\n- **Articles**: Create, read, update, and delete news articles.\n- **Comments**: Add and manage comments on news articles.\n- **Tags**: Add and manage tags for news articles.\n- **Likes**: Manage like interactions on news articles.\n\n## How to Use\n- Use the `POST /users` endpoint to register a new user.\n- Use the `POST /users/login` endpoint to authenticate a user and obtain an access token.\n- Use the `GET /articles` endpoint to retrieve a list of all news articles.\n- Use the `POST /articles` endpoint to add a new news article (authentication required).\n- Use the `POST /articles/{article_id}/comments` endpoint to add a comment to a specific article.\n- Use the `POST /articles/{article_id}/likes` endpoint to add a like to a specific article.\n\nThis API follows RESTful principles and supports CRUD (Create, Read, Update, Delete) operations on all major entities.",
+        "version": "1.0.0",
+        "contact": {
+            "name": "Al Ayyubi Sidik",
+            "email": "ayyub@gmail.com"
+        }
+    },
+    "servers": [
+        {
+            "description": "Hot News RESTful API Server",
+            "url": "https://hot-news.com"
+        }
+    ],
+    "paths": {
+        "/auth/signup": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "User signup",
+                "description": "Register a new user",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "username": {
+                                        "type": "string",
+                                        "example": "johndoe"
+                                    },
+                                    "full_name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "strongpassword123"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "johndoe@example.com"
+                                    }
+                                },
+                                "required": ["username", "password", "email"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User successfully registered",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "username": {
+                                                    "type": "string",
+                                                    "example": "yamal"
+                                                },
+                                                "full_name": {
+                                                    "type": "string",
+                                                    "example": "Yamal"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "yamal@gmail.com"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "0001-01-01T00:00:00Z"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "successfulResponse": {
+                                        "value": {
+                                            "data": {
+                                                "id": 5,
+                                                "username": "yamal",
+                                                "full_name": "Yamal",
+                                                "email": "yamal@gmail.com",
+                                                "created_at": "0001-01-01T00:00:00Z"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": "Username"
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "min"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "Username",
+                                                "message": "min"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/signin": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "User signin",
+                "description": "Sign in a user",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "username": {
+                                        "type": "string",
+                                        "example": "johndoe"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "strongpassword123"
+                                    }
+                                },
+                                "required": ["username", "password", "email"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User successfully signed in",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "username": {
+                                                    "type": "string",
+                                                    "example": "yamal"
+                                                },
+                                                "full_name": {
+                                                    "type": "string",
+                                                    "example": "Yamal"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "yamal@gmail.com"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "0001-01-01T00:00:00Z"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "successfulResponse": {
+                                        "value": {
+                                            "data": {
+                                                "id": 5,
+                                                "username": "yamal",
+                                                "full_name": "Yamal",
+                                                "email": "yamal@gmail.com",
+                                                "created_at": "0001-01-01T00:00:00Z"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": "Username"
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "min"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "Username",
+                                                "message": "min"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Invalid credentials"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "",
+                                                "message": "Invalid credentials"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/signout": {
+            "delete": {
+                "tags": ["Auth"],
+                "summary": "User signout",
+                "description": "Sign out the authenticated user",
+                "responses": {
+                    "200": {
+                        "description": "Signout successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string",
+                                            "example": "Signout successfully"
+                                        }
+                                    },
+                                    "example": {
+                                        "data": "Signout successfully"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Unauthorized"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "message": "Unauthorized"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/currentuser": {
+            "get": {
+                "tags": ["Auth"],
+                "summary": "Get current user",
+                "description": "Retrieve the details of the currently authenticated user",
+                "responses": {
+                    "200": {
+                        "description": "Current user details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "username": {
+                                                    "type": "string",
+                                                    "example": "yamal"
+                                                },
+                                                "full_name": {
+                                                    "type": "string",
+                                                    "example": "Yamal"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "yamal@gmail.com"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "0001-01-01T00:00:00Z"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "data": {
+                                            "id": 5,
+                                            "username": "yamal",
+                                            "full_name": "Yamal",
+                                            "email": "yamal@gmail.com",
+                                            "created_at": "0001-01-01T00:00:00Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Unauthorized"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "",
+                                                "message": "Unauthorized"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{userId}": {
+            "put": {
+                "tags": ["Auth"],
+                "summary": "Update user",
+                "description": "Update the details of a user",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "username": {
+                                        "type": "string",
+                                        "example": "yamal1"
+                                    },
+                                    "full_name": {
+                                        "type": "string",
+                                        "example": "yamal1"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "yamal@gmail.com"
+                                    }
+                                },
+                                "required": ["username", "email"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User successfully updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "username": {
+                                                    "type": "string",
+                                                    "example": "yamal1"
+                                                },
+                                                "full_name": {
+                                                    "type": "string",
+                                                    "example": "yamal1"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "yamal@gmail.com"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "0001-01-01T00:00:00Z"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "data": {
+                                            "id": 5,
+                                            "username": "yamal1",
+                                            "full_name": "yamal1",
+                                            "email": "yamal@gmail.com",
+                                            "created_at": "0001-01-01T00:00:00Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Username already exists"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "",
+                                                "message": "Username already exists"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Unauthorized"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "",
+                                                "message": "Unauthorized"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/categories": {
+            "get": {
+                "tags": ["Category"],
+                "summary": "Get all categories",
+                "description": "Retrieve a list of all categories",
+                "responses": {
+                    "200": {
+                        "description": "A list of categories",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Sport"
+                                                    },
+                                                    "slug": {
+                                                        "type": "string",
+                                                        "example": "sport"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-06-28T13:51:22+07:00"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "data": [
+                                            {
+                                                "id": 1,
+                                                "name": "Sport",
+                                                "slug": "sport",
+                                                "created_at": "2024-06-28T13:51:22+07:00"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "name": "Technology",
+                                                "slug": "technology",
+                                                "created_at": "2024-06-28T13:51:33+07:00"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Category"],
+                "summary": "Create a new category",
+                "description": "Add a new category to the system",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Entertainment"
+                                    }
+                                },
+                                "required": ["name"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Category successfully created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 9
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Entertainment"
+                                                },
+                                                "slug": {
+                                                    "type": "string",
+                                                    "example": "entertainment"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-07-02T09:12:31.715+07:00"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "data": {
+                                            "id": 9,
+                                            "name": "Entertainment",
+                                            "slug": "entertainment",
+                                            "created_at": "2024-07-02T09:12:31.715+07:00"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": "Name"
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "required"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "Name",
+                                                "message": "required"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Unauthorized"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "",
+                                                "message": "Unauthorized"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/show/{categorySlug}": {
+            "get": {
+                "tags": ["Category"],
+                "summary": "Get category by slug",
+                "description": "Retrieve a category by its slug",
+                "parameters": [
+                    {
+                        "name": "categorySlug",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "sport"
+                        },
+                        "description": "The slug of the category"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Category details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Sport"
+                                                },
+                                                "slug": {
+                                                    "type": "string",
+                                                    "example": "sport"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-06-28T13:51:22+07:00"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "data": {
+                                            "id": 1,
+                                            "name": "Sport",
+                                            "slug": "sport",
+                                            "created_at": "2024-06-28T13:51:22+07:00"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Category not found"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "",
+                                                "message": "Category not found"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/{categorySlug}": {
+            "put": {
+                "tags": ["Category"],
+                "summary": "Update a category",
+                "description": "Update the details of a category",
+                "parameters": [
+                    {
+                        "name": "categorySlug",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "comedy"
+                        },
+                        "description": "The slug of the category to update"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Comedy"
+                                    }
+                                },
+                                "required": ["name"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Category successfully updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 9
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Comedy"
+                                                },
+                                                "slug": {
+                                                    "type": "string",
+                                                    "example": "comedy"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "0001-01-01T00:00:00Z"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "data": {
+                                            "id": 9,
+                                            "name": "Comedy",
+                                            "slug": "comedy",
+                                            "created_at": "0001-01-01T00:00:00Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": "Name"
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "required"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "Name",
+                                                "message": "required"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Unauthorized"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "",
+                                                "message": "Unauthorized"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Category not found"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "",
+                                                "message": "Category not found"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Category"],
+                "summary": "Delete a category",
+                "description": "Delete a category by its slug",
+                "parameters": [
+                    {
+                        "name": "categorySlug",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "comedy"
+                        },
+                        "description": "The slug of the category to delete"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Category successfully deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string",
+                                            "example": "Category successfully deleted"
+                                        }
+                                    },
+                                    "example": {
+                                        "data": "Category successfully deleted"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Unauthorized"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "",
+                                                "message": "Unauthorized"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Category not found"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "",
+                                                "message": "Category not found"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/articles": {
+            "get": {
+                "tags": ["Article"],
+                "summary": "Get all articles",
+                "description": "Retrieve a list of all articles",
+                "responses": {
+                    "200": {
+                        "description": "A list of articles",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Spain juara"
+                                                    },
+                                                    "slug": {
+                                                        "type": "string",
+                                                        "example": "spain-juara"
+                                                    },
+                                                    "content": {
+                                                        "type": "string",
+                                                        "example": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non iure minima sunt, eligendi aliquid modi culpa consequatur vero, enim quis blanditiis..."
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-06-28T17:06:20+07:00"
+                                                    },
+                                                    "user": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "username": {
+                                                                "type": "string",
+                                                                "example": "ayyub"
+                                                            },
+                                                            "full_name": {
+                                                                "type": "string",
+                                                                "example": "Ayyub"
+                                                            },
+                                                            "email": {
+                                                                "type": "string",
+                                                                "example": "ayyub@gmail.com"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2024-06-28T13:46:55+07:00"
+                                                            }
+                                                        }
+                                                    },
+                                                    "category": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 2
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "Technology"
+                                                            },
+                                                            "slug": {
+                                                                "type": "string",
+                                                                "example": "technology"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "0001-01-01T00:00:00Z"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "data": [
+                                            {
+                                                "id": 1,
+                                                "title": "Spain juara",
+                                                "slug": "spain-juara",
+                                                "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non iure minima sunt, eligendi aliquid modi culpa consequatur vero, enim quis blanditiis. Asperiores, cumque voluptate? Dolor quo cupiditate nemo suscipit illum quaerat voluptate debitis accusamus delectus rerum veniam ut mollitia illo hic, sed corporis in, impedit molestiae. Recusandae quae labore perferendis commodi, voluptatem accusantium hic provident suscipit. Ipsam mollitia recusandae accusamus velit cupiditate iure libero dolores enim corrupti laborum commodi pariatur, quo placeat. Nostrum laborum quod consequatur expedita animi, velit similique, amet corrupti facere fugiat et consequuntur tenetur! Vitae enim quisquam adipisci illum possimus ex eius, sapiente at quasi natus? Id.",
+                                                "created_at": "2024-06-28T17:06:20+07:00",
+                                                "user": {
+                                                    "id": 1,
+                                                    "username": "ayyub",
+                                                    "full_name": "Ayyub",
+                                                    "email": "ayyub@gmail.com",
+                                                    "created_at": "2024-06-28T13:46:55+07:00"
+                                                },
+                                                "category": {
+                                                    "id": 2,
+                                                    "name": "Technology",
+                                                    "slug": "technology",
+                                                    "created_at": "0001-01-01T00:00:00Z"
+                                                }
+                                            },
+                                            {
+                                                "id": 2,
+                                                "title": "Jerman dibantai spain",
+                                                "slug": "jerman-dibantai-spain",
+                                                "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non iure minima sunt, eligendi aliquid modi culpa consequatur vero, enim quis blanditiis. Asperiores, cumque voluptate? Dolor quo cupiditate nemo suscipit illum quaerat voluptate debitis accusamus delectus rerum veniam ut mollitia illo hic, sed corporis in, impedit molestiae. Recusandae quae labore perferendis commodi, voluptatem accusantium hic provident suscipit. Ipsam mollitia recusandae accusamus velit cupiditate iure libero dolores enim corrupti laborum commodi pariatur, quo placeat. Nostrum laborum quod consequatur expedita animi, velit similique, amet corrupti facere fugiat et consequuntur tenetur! Vitae enim quisquam adipisci illum possimus ex eius, sapiente at quasi natus? Id.",
+                                                "created_at": "2024-06-28T17:35:45+07:00",
+                                                "user": {
+                                                    "id": 1,
+                                                    "username": "ayyub",
+                                                    "full_name": "Ayyub",
+                                                    "email": "ayyub@gmail.com",
+                                                    "created_at": "2024-06-28T13:46:55+07:00"
+                                                },
+                                                "category": {
+                                                    "id": 1,
+                                                    "name": "Sport",
+                                                    "slug": "sport",
+                                                    "created_at": "0001-01-01T00:00:00Z"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Article"],
+                "summary": "Create a new article",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "slug": {
+                                        "type": "string"
+                                    },
+                                    "content": {
+                                        "type": "string"
+                                    },
+                                    "user_id": {
+                                        "type": "integer"
+                                    },
+                                    "category_id": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "required": [
+                                    "title",
+                                    "slug",
+                                    "content",
+                                    "user_id",
+                                    "category_id"
+                                ]
+                            },
+                            "examples": {
+                                "example-1": {
+                                    "summary": "Example request",
+                                    "value": {
+                                        "title": "Test 9",
+                                        "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non iure minima sunt, eligendi aliquid modi culpa consequatur vero, enim quis blanditiis. Asperiores, cumque voluptate? Dolor quo cupiditate nemo suscipit illum quaerat voluptate debitis accusamus delectus rerum veniam ut mollitia illo hic, sed corporis in, impedit molestiae. Recusandae quae labore perferendis commodi, voluptatem accusantium hic provident suscipit. Ipsam mollitia recusandae accusamus velit cupiditate iure libero dolores enim corrupti laborum commodi pariatur, quo placeat. Nostrum laborum quod consequatur expedita animi, velit similique, amet corrupti facere fugiat et consequuntur tenetur! Vitae enim quisquam adipisci illum possimus ex eius, sapiente at quasi natus? Id.",
+                                        "user_id": 100,
+                                        "category_id": 2
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Article created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "title": {
+                                                    "type": "string"
+                                                },
+                                                "slug": {
+                                                    "type": "string"
+                                                },
+                                                "content": {
+                                                    "type": "string"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                },
+                                                "user": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer"
+                                                        },
+                                                        "username": {
+                                                            "type": "string"
+                                                        },
+                                                        "full_name": {
+                                                            "type": "string"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "format": "email"
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "format": "date-time"
+                                                        }
+                                                    }
+                                                },
+                                                "category": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer"
+                                                        },
+                                                        "name": {
+                                                            "type": "string"
+                                                        },
+                                                        "slug": {
+                                                            "type": "string"
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "format": "date-time"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "success": {
+                                        "summary": "A successful response",
+                                        "value": {
+                                            "data": {
+                                                "id": 9,
+                                                "title": "Test 9",
+                                                "slug": "test-9",
+                                                "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non iure minima sunt, eligendi aliquid modi culpa consequatur vero, enim quis blanditiis. Asperiores, cumque voluptate? Dolor quo cupiditate nemo suscipit illum quaerat voluptate debitis accusamus delectus rerum veniam ut mollitia illo hic, sed corporis in, impedit molestiae. Recusandae quae labore perferendis commodi, voluptatem accusantium hic provident suscipit. Ipsam mollitia recusandae accusamus velit cupiditate iure libero dolores enim corrupti laborum commodi pariatur, quo placeat. Nostrum laborum quod consequatur expedita animi, velit similique, amet corrupti facere fugiat et consequuntur tenetur! Vitae enim quisquam adipisci illum possimus ex eius, sapiente at quasi natus? Id.",
+                                                "created_at": "2024-07-02T09:31:41+07:00",
+                                                "user": {
+                                                    "id": 1,
+                                                    "username": "ayyub",
+                                                    "full_name": "Ayyub",
+                                                    "email": "ayyub@gmail.com",
+                                                    "created_at": "2024-06-28T13:46:55+07:00"
+                                                },
+                                                "category": {
+                                                    "id": 2,
+                                                    "name": "Technology",
+                                                    "slug": "technology",
+                                                    "created_at": "0001-01-01T00:00:00Z"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string"
+                                                    },
+                                                    "message": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "missingTitle": {
+                                        "summary": "Missing title",
+                                        "value": {
+                                            "errors": [
+                                                {
+                                                    "field": "Title",
+                                                    "message": "required"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string"
+                                                    },
+                                                    "message": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "userNotFound": {
+                                        "summary": "User not found",
+                                        "value": {
+                                            "errors": [
+                                                {
+                                                    "field": "",
+                                                    "message": "User not found"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string"
+                                                    },
+                                                    "message": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "unauthorized": {
+                                        "summary": "Unauthorized",
+                                        "value": {
+                                            "errors": [
+                                                {
+                                                    "field": "",
+                                                    "message": "Unauthorized"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/articles/categories/{categorySlug}": {
+            "get": {
+                "tags": ["Article"],
+                "summary": "Get articles by category",
+                "description": "Retrieve all articles belonging to a specific category",
+                "parameters": [
+                    {
+                        "name": "categorySlug",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Slug of the category"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of articles found in the category",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Spain juara"
+                                                    },
+                                                    "slug": {
+                                                        "type": "string",
+                                                        "example": "spain-juara"
+                                                    },
+                                                    "content": {
+                                                        "type": "string",
+                                                        "example": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non iure minima sunt, eligendi aliquid modi culpa consequatur vero, enim quis blanditiis..."
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-06-28T17:06:20+07:00"
+                                                    },
+                                                    "user": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "username": {
+                                                                "type": "string",
+                                                                "example": "ayyub"
+                                                            },
+                                                            "full_name": {
+                                                                "type": "string",
+                                                                "example": "Ayyub"
+                                                            },
+                                                            "email": {
+                                                                "type": "string",
+                                                                "example": "ayyub@gmail.com"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2024-06-28T13:46:55+07:00"
+                                                            }
+                                                        }
+                                                    },
+                                                    "category": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 2
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "Technology"
+                                                            },
+                                                            "slug": {
+                                                                "type": "string",
+                                                                "example": "technology"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "0001-01-01T00:00:00Z"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "data": [
+                                            {
+                                                "id": 1,
+                                                "title": "Spain juara",
+                                                "slug": "spain-juara",
+                                                "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non iure minima sunt, eligendi aliquid modi culpa consequatur vero, enim quis blanditiis...",
+                                                "created_at": "2024-06-28T17:06:20+07:00",
+                                                "user": {
+                                                    "id": 1,
+                                                    "username": "ayyub",
+                                                    "full_name": "Ayyub",
+                                                    "email": "ayyub@gmail.com",
+                                                    "created_at": "2024-06-28T13:46:55+07:00"
+                                                },
+                                                "category": {
+                                                    "id": 2,
+                                                    "name": "Technology",
+                                                    "slug": "technology",
+                                                    "created_at": "0001-01-01T00:00:00Z"
+                                                }
+                                            },
+                                            {
+                                                "id": 2,
+                                                "title": "Jerman dibantai spain",
+                                                "slug": "jerman-dibantai-spain",
+                                                "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non iure minima sunt, eligendi aliquid modi culpa consequatur vero, enim quis blanditiis...",
+                                                "created_at": "2024-06-28T17:35:45+07:00",
+                                                "user": {
+                                                    "id": 1,
+                                                    "username": "ayyub",
+                                                    "full_name": "Ayyub",
+                                                    "email": "ayyub@gmail.com",
+                                                    "created_at": "2024-06-28T13:46:55+07:00"
+                                                },
+                                                "category": {
+                                                    "id": 1,
+                                                    "name": "Sport",
+                                                    "slug": "sport",
+                                                    "created_at": "0001-01-01T00:00:00Z"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Category not found"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "",
+                                                "message": "Category not found"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/articles/users/{categorySlug}": {
+            "get": {
+                "tags": ["Article"],
+                "summary": "Get articles by user",
+                "description": "Retrieve all articles belonging to a specific user",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "username of the user"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of articles found in the user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Spain juara"
+                                                    },
+                                                    "slug": {
+                                                        "type": "string",
+                                                        "example": "spain-juara"
+                                                    },
+                                                    "content": {
+                                                        "type": "string",
+                                                        "example": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non iure minima sunt, eligendi aliquid modi culpa consequatur vero, enim quis blanditiis..."
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-06-28T17:06:20+07:00"
+                                                    },
+                                                    "user": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "username": {
+                                                                "type": "string",
+                                                                "example": "ayyub"
+                                                            },
+                                                            "full_name": {
+                                                                "type": "string",
+                                                                "example": "Ayyub"
+                                                            },
+                                                            "email": {
+                                                                "type": "string",
+                                                                "example": "ayyub@gmail.com"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2024-06-28T13:46:55+07:00"
+                                                            }
+                                                        }
+                                                    },
+                                                    "category": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 2
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "Technology"
+                                                            },
+                                                            "slug": {
+                                                                "type": "string",
+                                                                "example": "technology"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "0001-01-01T00:00:00Z"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "data": [
+                                            {
+                                                "id": 1,
+                                                "title": "Spain juara",
+                                                "slug": "spain-juara",
+                                                "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non iure minima sunt, eligendi aliquid modi culpa consequatur vero, enim quis blanditiis...",
+                                                "created_at": "2024-06-28T17:06:20+07:00",
+                                                "user": {
+                                                    "id": 1,
+                                                    "username": "ayyub",
+                                                    "full_name": "Ayyub",
+                                                    "email": "ayyub@gmail.com",
+                                                    "created_at": "2024-06-28T13:46:55+07:00"
+                                                },
+                                                "category": {
+                                                    "id": 2,
+                                                    "name": "Technology",
+                                                    "slug": "technology",
+                                                    "created_at": "0001-01-01T00:00:00Z"
+                                                }
+                                            },
+                                            {
+                                                "id": 2,
+                                                "title": "Jerman dibantai spain",
+                                                "slug": "jerman-dibantai-spain",
+                                                "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non iure minima sunt, eligendi aliquid modi culpa consequatur vero, enim quis blanditiis...",
+                                                "created_at": "2024-06-28T17:35:45+07:00",
+                                                "user": {
+                                                    "id": 1,
+                                                    "username": "ayyub",
+                                                    "full_name": "Ayyub",
+                                                    "email": "ayyub@gmail.com",
+                                                    "created_at": "2024-06-28T13:46:55+07:00"
+                                                },
+                                                "category": {
+                                                    "id": 1,
+                                                    "name": "Sport",
+                                                    "slug": "sport",
+                                                    "created_at": "0001-01-01T00:00:00Z"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "User not found"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "",
+                                                "message": "User not found"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/articles/show/{categorySlug}": {
+            "get": {
+                "tags": ["Article"],
+                "summary": "Get article by category slug",
+                "parameters": [
+                    {
+                        "name": "categorySlug",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Slug of the category"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Spain juara"
+                                                },
+                                                "slug": {
+                                                    "type": "string",
+                                                    "example": "spain-juara"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "Lorem ipsum dolor sit amet consectetur adipisicing elit..."
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-06-28T17:06:20+07:00"
+                                                },
+                                                "user": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "username": {
+                                                            "type": "string",
+                                                            "example": "ayyub"
+                                                        },
+                                                        "full_name": {
+                                                            "type": "string",
+                                                            "example": "Ayyub"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "example": "ayyub@gmail.com"
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2024-06-28T13:46:55+07:00"
+                                                        }
+                                                    }
+                                                },
+                                                "category": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 2
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "Technology"
+                                                        },
+                                                        "slug": {
+                                                            "type": "string",
+                                                            "example": "technology"
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "0001-01-01T00:00:00Z"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "User not found"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/articles/{categorySlug}": {
+            "put": {
+                "tags": ["Article"],
+                "summary": "Update an article by category slug",
+                "parameters": [
+                    {
+                        "name": "categorySlug",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Slug of the category to update the article"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Article updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 4
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "test 10"
+                                                },
+                                                "slug": {
+                                                    "type": "string",
+                                                    "example": "test-10"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "Lorem ipsum dolor sit amet ..."
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-06-28T17:39:58+07:00"
+                                                },
+                                                "user": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "username": {
+                                                            "type": "string",
+                                                            "example": "ayyub"
+                                                        },
+                                                        "full_name": {
+                                                            "type": "string",
+                                                            "example": "Ayyub"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "example": "ayyub@gmail.com"
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2024-06-28T13:46:55+07:00"
+                                                        }
+                                                    }
+                                                },
+                                                "category": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "Sport"
+                                                        },
+                                                        "slug": {
+                                                            "type": "string",
+                                                            "example": "sport"
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "0001-01-01T00:00:00Z"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": "Username"
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "required"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "Username",
+                                                "message": "required"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Article not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Article not found"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "",
+                                                "message": "Article not found"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Invalid credentials"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "",
+                                                "message": "Invalid credentials"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Article"],
+                "summary": "Delete an article by category slug",
+                "parameters": [
+                    {
+                        "name": "categorySlug",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Slug of the category to delete the article"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Article successfully deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string",
+                                            "example": "Article successfully deleted"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Article not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Article not found"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/comments/show/{commentId}": {
+            "get": {
+                "tags": ["Comment"],
+                "summary": "Get a comment by ID",
+                "operationId": "deleteCommentById",
+                "parameters": [
+                    {
+                        "name": "commentId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "description": "ID of the comment to delete"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "Wah keren sekaliiii"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-06-29T11:15:11+07:00"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Comment not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Comment not found"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/comments/{commentId}": {
+            "delete": {
+                "tags": ["Comment"],
+                "summary": "Delete a comment by ID",
+                "operationId": "deleteCommentById",
+                "parameters": [
+                    {
+                        "name": "commentId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "description": "ID of the comment to delete"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string",
+                                            "example": "Comment has been deleted"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Comment not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Comment not found"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": ["Comment"],
+                "summary": "Update a comment",
+                "description": "Update the details of a comment",
+                "parameters": [
+                    {
+                        "name": "commentId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "comedy"
+                        },
+                        "description": "The slug of the comment to update"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Comedy"
+                                    }
+                                },
+                                "required": ["name"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Category successfully updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 9
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Comedy"
+                                                },
+                                                "slug": {
+                                                    "type": "string",
+                                                    "example": "comedy"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "0001-01-01T00:00:00Z"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "data": {
+                                            "id": 9,
+                                            "name": "Comedy",
+                                            "slug": "comedy",
+                                            "created_at": "0001-01-01T00:00:00Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": "Name"
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "required"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "Name",
+                                                "message": "required"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Unauthorized"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "",
+                                                "message": "Unauthorized"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Category not found"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "",
+                                                "message": "Category not found"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/comments": {
+            "post": {
+                "tags": ["Comment"],
+                "summary": "Create a new comment",
+                "description": "Add a new comment to the system",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Entertainment"
+                                    }
+                                },
+                                "required": ["name"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Comment successfully created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "user_id": {
+                                                    "type": "integer",
+                                                    "example": 9
+                                                },
+                                                "article_id": {
+                                                    "type": "integer",
+                                                    "example": 9
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "blablabla"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": "Name"
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "required"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "Name",
+                                                "message": "required"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Unauthorized"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "",
+                                                "message": "Unauthorized"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/likes/show/{likeId}": {
+            "get": {
+                "tags": ["Like"],
+                "summary": "Get a like by ID",
+                "operationId": "getLikeById",
+                "parameters": [
+                    {
+                        "name": "likeId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "description": "ID of the like to delete"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                },
+                                                "user_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "article_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-06-29T11:15:11+07:00"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Like not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Like not found"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/likes": {
+            "post": {
+                "tags": ["Like"],
+                "summary": "Create a new like",
+                "description": "Add a new like to the system",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Entertainment"
+                                    }
+                                },
+                                "required": ["name"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Like successfully created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "user_id": {
+                                                    "type": "integer",
+                                                    "example": 9
+                                                },
+                                                "article_id": {
+                                                    "type": "integer",
+                                                    "example": 9
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "integer",
+                                                        "example": "user_id"
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "required"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "user_id",
+                                                "message": "required"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Unauthorized"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "example": {
+                                        "errors": [
+                                            {
+                                                "field": "",
+                                                "message": "Unauthorized"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Like"],
+                "summary": "Delete a like by ID",
+                "operationId": "deleteLikeById",
+                "parameters": [
+                    {
+                        "name": "likeId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "description": "ID of the like to delete"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string",
+                                            "example": "Like has been deleted"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Like not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "field": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "message": {
+                                                        "type": "string",
+                                                        "example": "Comment not found"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

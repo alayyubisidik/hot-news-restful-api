@@ -32,3 +32,72 @@ user_id (Foreign Key ke user_id di tabel Pengguna)
 content (konten komentar)
 created_at (tanggal dibuat)
 updated_at (tanggal diperbarui)
+
+
+ buatkan saya open api menggunakan json untuk endpoint get by id article dengan
+dengan tag Comment 
+method Delete
+path: /comments/{commentId}
+
+response 200
+{
+    "data": {
+        "id": 3,
+        "content": "Wah keren sekaliiii",
+        "created_at": "2024-06-29T11:15:11+07:00",
+    }
+}
+
+404
+{
+    "errors": [
+        {
+            "field": "",
+            "message": "Comment not found"
+        }
+    ]
+}
+
+
+
+
+
+
+
+
+
+
+
+400
+{
+    "errors": [
+        {
+            "field": "Title",
+            "message": "required"
+        }
+    ]
+}
+
+404
+
+{
+    "errors": [
+        {
+            "field": "",
+            "message": "User not found"
+        }
+    ]
+}
+
+401
+
+{
+    "errors": [
+        {
+            "field": "",
+            "message": "Unauthorized"
+        }
+    ]
+}
+
+
