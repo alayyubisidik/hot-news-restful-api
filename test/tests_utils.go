@@ -5,7 +5,6 @@ import (
 	"hot_news_2/app"
 	"hot_news_2/controller"
 	"hot_news_2/helper"
-	"hot_news_2/middleware"
 	"hot_news_2/model/domain"
 	"hot_news_2/repository"
 	"hot_news_2/service"
@@ -42,7 +41,7 @@ func SetupRouter(db *gorm.DB) http.Handler {
 	likeService := service.NewLikeService(likeRepository, db, validate)
 	likeController := controller.NewLikeController(likeService)
 	router := app.NewRouter(userController, categoryController, articleController, commentController, likeController)
-	return middleware.NewAuthMiddleware(router)
+	return router
 }
 
 func AddJWTToCookie(request *http.Request) {

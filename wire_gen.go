@@ -11,7 +11,6 @@ import (
 	"github.com/google/wire"
 	"hot_news_2/app"
 	"hot_news_2/controller"
-	"hot_news_2/middleware"
 	"hot_news_2/repository"
 	"hot_news_2/service"
 	"net/http"
@@ -38,8 +37,7 @@ func InitializedServer() *http.Server {
 	likeService := service.NewLikeService(likeRepository, db, validate)
 	likeController := controller.NewLikeController(likeService)
 	router := app.NewRouter(userController, categoryController, articleController, commentController, likeController)
-	authMiddleware := middleware.NewAuthMiddleware(router)
-	server := NewServer(authMiddleware)
+	server := NewServer(router)
 	return server
 }
 

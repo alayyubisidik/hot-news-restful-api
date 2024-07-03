@@ -6,14 +6,12 @@ package main
 import (
 	"hot_news_2/app"
 	"hot_news_2/controller"
-	"hot_news_2/middleware"
 	"hot_news_2/repository"
 	"hot_news_2/service"
 	"net/http"
 
 	"github.com/go-playground/validator"
 	"github.com/google/wire"
-	"github.com/julienschmidt/httprouter"
 )
 
 var userSet = wire.NewSet(
@@ -46,6 +44,7 @@ var likeSet = wire.NewSet(
 	controller.NewLikeController,
 )
 
+
 func InitializedServer() *http.Server {
 	wire.Build(
 		app.NewDB,
@@ -56,8 +55,6 @@ func InitializedServer() *http.Server {
 		commentSet,
 		likeSet,
 		app.NewRouter,
-		wire.Bind(new(http.Handler), new(*httprouter.Router)),
-		middleware.NewAuthMiddleware,
 		NewServer,
 	)
 

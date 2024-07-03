@@ -1,16 +1,17 @@
 package main
 
 import (
+
 	"hot_news_2/helper"
-	"hot_news_2/middleware"
 	"net/http"
 
+	"github.com/julienschmidt/httprouter"
 )
 
-func NewServer(authMiddleware *middleware.AuthMiddleware) *http.Server {
+func NewServer(router *httprouter.Router) *http.Server {
 	return &http.Server{
-		Addr: "localhost:3000",
-		Handler: authMiddleware,
+		Addr:    "localhost:3000",
+		Handler: router,
 	}
 }
 
@@ -19,4 +20,4 @@ func main() {
 
 	err := server.ListenAndServe()
 	helper.PanicIfError(err)
-}
+} 

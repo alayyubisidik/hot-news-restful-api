@@ -355,7 +355,7 @@ func TestUpdateArticleFailed(t *testing.T) {
 
 func TestDeleteArticleSuccess(t *testing.T) {
 	db := SetupTestDB()
-	TruncateTables(db, "articles", "categories", "users", "comments")
+	TruncateTables(db, "articles", "categories", "users", "comments", "likes")
 	router := SetupRouter(db)
 
 	user := CreateUser(db, "user1", "user1@gmail.com")
